@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher Key &amp; Marking - The Platform Overrun</title>
+<style>
+:root{--ink:#0d1117;--ink2:#131a24;--ink3:#1a2430;--amb:#e8a33d;--chalk:#e9e7e2;
+      --chalk-dim:#9aa3ad;--ok:#5fb87a;--no:#d1604f;--rule:#26313d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--chalk);
+  font:15px/1.6 "Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 22px 90px}
+h1{font-size:24px;margin:0}
+.caseno{font:600 12px/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.22em;color:#a8762c;margin-bottom:8px}
+.lede{color:var(--chalk-dim);max-width:78ch;margin:14px 0 22px}
+.inputs{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+@media(max-width:820px){.inputs{grid-template-columns:1fr}}
+.inputs label{display:block;font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--amb);margin-bottom:6px}
+.inputs .sub{font-size:12.5px;color:var(--chalk-dim);margin:-2px 0 8px}
+textarea{width:100%;min-height:150px;background:var(--ink2);border:1px solid var(--rule);
+  color:var(--chalk);border-radius:2px;padding:13px;font:14px/1.7 Consolas,"SFMono-Regular",monospace;resize:vertical}
+textarea:focus{border-color:var(--amb);outline:none}
+.btn{background:var(--amb);color:#17120a;border:0;border-radius:2px;padding:12px 24px;
+  font-size:15px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.ghost{background:transparent;color:var(--chalk-dim);border:1px solid var(--rule)}
+.team{background:var(--ink2);border:1px solid var(--rule);border-radius:3px;margin:20px 0;
+  overflow:hidden;break-inside:avoid;page-break-inside:avoid}
+.thead{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--ink3)}
+.tname{font-weight:700;font-size:17px;letter-spacing:.04em}
+.verdict{font-weight:700;font-size:12.5px;letter-spacing:.08em;padding:5px 12px;border-radius:2px}
+.verdict.over{background:rgba(209,96,79,.16);color:var(--no);border:1px solid rgba(209,96,79,.4)}
+.verdict.ok{background:rgba(95,184,122,.16);color:var(--ok);border:1px solid rgba(95,184,122,.4)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0}
+.col{padding:16px 18px;border-right:1px solid var(--rule)}
+.col:last-child{border-right:0}
+h4{margin:0 0 10px;font-size:11.5px;letter-spacing:.14em;color:var(--amb);font-weight:700}
+.row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dotted #202b36}
+.row:last-child{border-bottom:0}
+.row span:first-child{color:var(--chalk-dim)}
+.row span:last-child{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+.note{padding:12px 18px;border-top:1px solid var(--rule);color:var(--chalk-dim);font-size:13.5px;line-height:1.6}
+.markbox{border-top:1px solid var(--rule);padding:14px 18px;background:#10161f}
+.markbox table{width:100%;border-collapse:collapse;font-size:13.5px}
+.markbox th{text-align:left;color:var(--chalk-dim);font-weight:600;padding:4px 8px;border-bottom:1px solid var(--rule)}
+.markbox td{padding:4px 8px;border-bottom:1px dotted #202b36;font-variant-numeric:tabular-nums}
+.markbox td.m{text-align:right;font-weight:700;white-space:nowrap}
+.markbox .full{color:var(--ok)} .markbox .zero{color:var(--no)} .markbox .part{color:var(--amb)}
+.total{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px;font-weight:700}
+.total .hand{font-weight:400;color:var(--chalk-dim)}
+.warn{color:var(--no);margin:14px 0}
+.scheme{background:var(--ink2);border:1px solid var(--rule);border-radius:3px;padding:14px 18px;margin:22px 0 4px;
+  font-size:13.5px;color:var(--chalk-dim)}
+.scheme b{color:var(--chalk)}
+@media print{
+  body{background:#fff;color:#000}.noprint{display:none}
+  .team,.col,.thead,.markbox,.scheme{background:#fff;border-color:#bbb}
+  h4{color:#7a5410}.row span:first-child{color:#555}
+  .verdict.over{color:#a32b18;border-color:#a32b18;background:#fff}
+  .verdict.ok{color:#1d6b36;border-color:#1d6b36;background:#fff}
+  .note,.scheme,.total .hand{color:#444}
+  .markbox .full{color:#1d6b36}.markbox .zero{color:#a32b18}.markbox .part{color:#7a5410}
+}
+</style></head><body><div class="wrap">
+  <div class="caseno">1D MOTION &nbsp;&#183;&nbsp; INDIVIDUAL ASSESSMENT</div>
+  <h1>The Platform Overrun &#8212; Teacher Key &amp; Marking</h1>
+  <p class="lede">Paste your class list to generate every student&#8217;s evidence and answers. To mark, also paste the <em>answer line</em> printed at the bottom of each student&#8217;s report. Spacing, case and punctuation in names are ignored. The calculation stages, the cross-check question and the verdict are marked automatically, with error carried forward; working, CER and cross-examination are marked by you.</p>
+  <div class="noprint">
+    <div class="inputs">
+      <div><label for="names">CLASS LIST</label><div class="sub">One name per line, as students typed it.</div>
+        <textarea id="names" placeholder="Sara Al-Ahmad&#10;Omar Khalid&#10;Noor Hassan"></textarea></div>
+      <div><label for="lines">ANSWER LINES (OPTIONAL)</label><div class="sub">One per line, copied from the reports. Students not on the class list are added automatically.</div>
+        <textarea id="lines" placeholder="Sara Al-Ahmad|17.2|21.5|184.8|22.2|185.6|0.43|1|O"></textarea></div>
+    </div>
+    <div><button class="btn" id="go">Generate key</button>
+    <button class="btn ghost" id="pr">Print / save as PDF</button></div>
+  </div>
+  <div class="scheme"><b>Mark scheme, 30 marks.</b> Automatic (12): stage 1 &#8211; 1, stage 2 &#8211; 2, stage 3 &#8211; 2, stage 4 &#8211; 1, stage 5 &#8211; 2, stage 6 &#8211; 1, cross-check question &#8211; 1, verdict &#8211; 2. By hand (18): working shown, 1 per stage &#8211; 6; claim, evidence, reasoning &#8211; 2 each; cross-examination &#8211; 3 each. Answers are accepted within 3% (stage 4 also &#177;0.6 m, stage 6 also &#177;0.15 percentage points).</div>
+  <div id="out"></div>
+</div>
+<script>
+/* ===================== PHYSICS CORE ===================== */
+(function (root) {
+  'use strict';
+
+  var TOL = 0.03;          // relative tolerance used by the marking panel
+  var XABS = 0.15;         // absolute margin (percentage points) for the cross-check stage
+
+  function normalizeName(n){ return String(n||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+  function xmur3(str){var h=1779033703^str.length;for(var i=0;i<str.length;i++){
+    h=Math.imul(h^str.charCodeAt(i),3432918353);h=(h<<13)|(h>>>19);}
+    return function(){h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);
+      h^=h>>>16;return h>>>0;};}
+  function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;
+    var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;
+    return((t^(t>>>14))>>>0)/4294967296;};}
+  function makeRng(n){var s=xmur3('PF::MOTION1D::PLATFORMOVERRUN::'+normalizeName(n));s();
+    return mulberry32(s());}
+  function rr(r,a,b){return a+r()*(b-a);}
+  function rstep(r,a,b,s){var k=Math.floor((b-a)/s+1e-9)+1;return round(a+Math.floor(r()*k)*s,6);}
+  function round(v,d){var f=Math.pow(10,d);return Math.round(v*f)/f;}
+
+  function generate(name){
+    var rng = makeRng(name);
+
+    /* --- the evidence --- */
+    var v_kmh = rstep(rng, 40, 90, 1);          // trackside camera at the braking beacon
+    var a_mag = rstep(rng, 0.60, 1.20, 0.05);   // constant braking rate, m/s^2 (magnitude)
+    var overran = rng() < 0.5;
+
+    var v_i  = v_kmh / 3.6;                     // m/s
+    var t    = v_i / a_mag;                     // s, from v_f = v_i + a t with v_f = 0
+    var dx   = v_i * v_i / (2 * a_mag);         // m, from v_f^2 = v_i^2 + 2 a dx
+
+    /* Distance from the braking beacon to the stop marker. The stopping
+       distance always lands at least 8% away from the marker on the intended
+       side, so the verdict never hangs on rounding or on the small difference
+       between the calculation and the recorder. */
+    var f = rr(rng, 1.08, 1.30);
+    var d = overran ? Math.round(dx / f) : Math.round(dx * f);
+
+    /* --- the sealed event recorder: an independent v-t log ---
+       It logged wheel speed, so its two readings differ very slightly from
+       the camera and the brake figure. The area under its graph must sit
+       close to the calculated distance, but never exactly on it, so the
+       cross-check has something to measure. */
+    var v_rec, t_rec, area, diff, k = 0;
+    do {
+      v_rec = round(v_i * (1 + rr(rng, -0.006, 0.006)), 1);
+      t_rec = round(t   * (1 + rr(rng, -0.012, 0.012)), 1);
+      area  = 0.5 * v_rec * t_rec;
+      diff  = Math.abs(dx - area) / area * 100;
+      k++;
+    } while ((diff < 0.2 || diff > 2.2) && k < 200);
+
+    var gap = Math.abs(dx - d);
+
+    return {
+      name: normalizeName(name),
+      nameDisplay: String(name || '').trim(),
+      given: { v_kmh: v_kmh, a: a_mag, d: d },
+      sealed: { v_rec: v_rec, t_rec: t_rec },
+      answers: {
+        v_i: v_i,        // m/s
+        t: t,            // s
+        dx: dx,          // m
+        gap: gap,        // m
+        area: area,      // m
+        xcheck: diff     // %
+      },
+      verdict: dx > d ? 'OVERRAN THE MARKER' : 'STOPPED SHORT OF THE MARKER',
+      truth: {
+        overran: dx > d,
+        marginPct: Math.abs(dx - d) / d * 100,
+        /* the wrong answers worth recognising on sight */
+        trapVT: v_i * t,                          // distance = speed x time (twice the truth)
+        trapKmh: v_kmh * v_kmh / (2 * a_mag),     // km/h never converted
+        trapTkmh: v_kmh / a_mag,                  // stage 2 with km/h
+        trapX36: v_kmh * 3.6,                     // multiplied instead of divided
+        trapRect: v_rec * t_rec                   // area of the rectangle, half missing
+      }
+    };
+  }
+
+  /* --- marking with error carried forward ---
+     s = [v_i, t, dx, gap, area, xcheck] as the student entered them (NaN if blank)
+     gate = index chosen at the cross-check question (1 is correct)
+     verdict = 'O' (overran) or 'S' (stopped short) */
+  function close(v, target, rel, abs){
+    if (!isFinite(v) || !isFinite(target)) return false;
+    return Math.abs(v - target) <= Math.max(rel * Math.abs(target), abs || 0);
+  }
+  function mark(C, s, gate, verdict){
+    var A = C.answers, g = C.given, R = [], T = C.truth;
+    function push(stage, got, max, why){ R.push({stage:stage, got:got, max:max, why:why}); }
+
+    /* 1 - speed in m/s */
+    if (close(s[0], A.v_i, TOL)) push(1, 1, 1, 'correct');
+    else if (close(s[0], T.trapX36, TOL)) push(1, 0, 1, 'multiplied by 3.6 instead of dividing');
+    else push(1, 0, 1, isFinite(s[0]) ? 'incorrect' : 'blank');
+
+    /* 2 - stopping time; ECF from the student's own speed */
+    var tE = isFinite(s[0]) ? Math.abs(s[0]) / g.a : NaN;
+    if (close(Math.abs(s[1]), A.t, TOL) || close(Math.abs(s[1]), tE, TOL)) {
+      if (s[1] < 0) push(2, 1, 2, 'right size, negative time: sign of a mishandled');
+      else push(2, 2, 2, close(s[1], A.t, TOL) ? 'correct' : 'correct method on own stage 1 (ECF)');
+    } else if (close(Math.abs(s[1]), T.trapTkmh, TOL)) push(2, 0, 2, 'used km/h directly');
+    else push(2, 0, 2, isFinite(s[1]) ? 'incorrect' : 'blank');
+
+    /* 3 - stopping distance; ECF from own speed, or from own speed and time */
+    var xE1 = isFinite(s[0]) ? s[0] * s[0] / (2 * g.a) : NaN;
+    var xE2 = (isFinite(s[0]) && isFinite(s[1])) ? 0.5 * Math.abs(s[0] * s[1]) : NaN;
+    var vtE = (isFinite(s[0]) && isFinite(s[1])) ? Math.abs(s[0] * s[1]) : NaN;
+    if (close(Math.abs(s[2]), A.dx, TOL)) push(3, s[2] < 0 ? 1 : 2, 2, s[2] < 0 ? 'right size, negative distance' : 'correct');
+    else if (close(s[2], T.trapVT, TOL) || close(s[2], vtE, TOL)) push(3, 0, 2, 'used distance = speed x time (twice the true distance)');
+    else if (close(s[2], T.trapKmh, TOL)) push(3, 0, 2, 'used km/h directly');
+    else if (close(Math.abs(s[2]), xE1, TOL) || close(Math.abs(s[2]), xE2, TOL)) push(3, 2, 2, 'correct method on own earlier answers (ECF)');
+    else push(3, 0, 2, isFinite(s[2]) ? 'incorrect' : 'blank');
+
+    /* 4 - gap to the marker; ECF from own stage 3 */
+    var gE = isFinite(s[2]) ? Math.abs(Math.abs(s[2]) - g.d) : NaN;
+    if (close(Math.abs(s[3]), A.gap, TOL, 0.6)) push(4, 1, 1, 'correct');
+    else if (close(Math.abs(s[3]), gE, TOL, 0.6)) push(4, 1, 1, 'correct on own stage 3 (ECF)');
+    else push(4, 0, 1, isFinite(s[3]) ? 'incorrect' : 'blank');
+
+    /* 5 - area under the recorder graph; independent of earlier stages */
+    if (close(s[4], A.area, TOL)) push(5, 2, 2, 'correct');
+    else if (close(s[4], T.trapRect, TOL)) push(5, 0, 2, 'used the whole rectangle - the half is missing');
+    else push(5, 0, 2, isFinite(s[4]) ? 'incorrect' : 'blank');
+
+    /* 6 - cross-check; ECF from own stages 3 and 5 */
+    var cE = (isFinite(s[2]) && isFinite(s[4]) && s[4] !== 0)
+           ? Math.abs(Math.abs(s[2]) - s[4]) / Math.abs(s[4]) * 100 : NaN;
+    if (close(s[5], A.xcheck, TOL, XABS)) push(6, 1, 1, 'correct');
+    else if (close(s[5], cE, TOL, XABS)) push(6, 1, 1, 'correct on own stages 3 and 5 (ECF)');
+    else push(6, 0, 1, isFinite(s[5]) ? 'incorrect' : 'blank');
+
+    /* gate */
+    push('Q', gate === 1 ? 1 : 0, 1, gate === 1 ? 'correct' : (gate >= 0 ? 'incorrect' : 'blank'));
+
+    /* verdict: right, or consistent with the student's own stage 3 */
+    var truthV = C.truth.overran ? 'O' : 'S';
+    var ownV = isFinite(s[2]) ? (Math.abs(s[2]) > g.d ? 'O' : 'S') : null;
+    if (verdict === truthV) push('V', 2, 2, 'correct');
+    else if (verdict && verdict === ownV) push('V', 2, 2, 'consistent with own stage 3 (ECF)');
+    else push('V', 0, 2, verdict ? 'incorrect' : 'blank');
+
+    var got = 0, max = 0;
+    R.forEach(function(r){ got += r.got; max += r.max; });
+    return { rows: R, got: got, max: max };
+  }
+
+  root.PF1D = { generate: generate, mark: mark, normalizeName: normalizeName, TOL: TOL, XABS: XABS };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+
+/* ===================== APP ===================== */
+(function(){
+var $=function(s){return document.querySelector(s);};
+function f(v,d){return Number(v).toFixed(d);}
+function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function num(v){ var x=parseFloat(String(v==null?'':v).trim().replace(/,/g,'')); return isFinite(x)?x:NaN; }
+
+function parseLine(line){
+  var p=line.split('|'); if(p.length<9) return null;
+  var name=p[0].trim(); if(PF1D.normalizeName(name).length<3) return null;
+  var s=p.slice(1,7).map(num);
+  var g=p[7].trim(); var gate = /^\d+$/.test(g) ? +g : -1;
+  var v=p[8].trim().toUpperCase(); var verdict = (v==='O'||v==='S') ? v : null;
+  return {name:name, s:s, gate:gate, verdict:verdict, raw:p.slice(1,9)};
+}
+
+var LABELS={1:'1 \u00b7 Speed in m/s',2:'2 \u00b7 Stopping time',3:'3 \u00b7 Stopping distance',
+  4:'4 \u00b7 Gap to marker',5:'5 \u00b7 Area under v\u2013t',6:'6 \u00b7 Cross-check',
+  Q:'Cross-check question',V:'Verdict'};
+var GATE_SHORT=['\u201cThe train overran\u201d','\u201cConstant braking model can be trusted\u201d','\u201cDriver braked at the right place\u201d','\u201cPassenger was mistaken\u201d'];
+
+function markHTML(R,L){
+  var M=PF1D.mark(R,L.s,L.gate,L.verdict);
+  var entered=L.raw;
+  var rows=M.rows.map(function(r,k){
+    var cls=r.got===r.max?'full':(r.got===0?'zero':'part');
+    var shown = k<6 ? esc(entered[k]) : (r.stage==='Q'
+      ? (L.gate>=0 && L.gate<4 ? GATE_SHORT[L.gate] : '-')
+      : (L.verdict==='O' ? 'overran' : L.verdict==='S' ? 'stopped short' : '-'));
+    return '<tr><td>'+LABELS[r.stage]+'</td><td>'+shown+'</td><td>'+esc(r.why)+'</td>'
+      +'<td class="m '+cls+'">'+r.got+' / '+r.max+'</td></tr>';
+  }).join('');
+  return '<div class="markbox"><h4>AUTOMATIC MARKING &#8212; FROM THE STUDENT&#8217;S ANSWER LINE</h4>'
+    +'<table><tr><th>Item</th><th>Entered</th><th>Why</th><th style="text-align:right">Mark</th></tr>'+rows+'</table>'
+    +'<div class="total"><span>Automatic total: '+M.got+' / '+M.max+'</span>'
+    +'<span class="hand">By hand: working ___ / 6 &nbsp; CER ___ / 6 &nbsp; cross-examination ___ / 6 &nbsp; &nbsp; Total ___ / 30</span></div></div>';
+}
+
+function card(R,L){
+  var g=R.given,a=R.answers,t=R.truth,sl=R.sealed;
+  var over=t.overran;
+  function row(k,v){return '<div class="row"><span>'+k+'</span><span>'+v+'</span></div>';}
+  return '<div class="team">'
+  +'<div class="thead"><div class="tname">'+esc(R.nameDisplay)+'</div>'
+  +'<div class="verdict '+(over?'over':'ok')+'">'+R.verdict+'</div></div>'
+  +'<div class="cols">'
+  +'<div class="col"><h4>EVIDENCE GIVEN</h4>'
+  + row('Speed at the beacon', g.v_kmh+' km/h')
+  + row('Braking rate', f(g.a,2)+' m/s&#178;')
+  + row('Beacon to stop marker', g.d+' m')
+  + row('Recorder point 1', '0 s, '+f(sl.v_rec,1)+' m/s')
+  + row('Recorder point 2', f(sl.t_rec,1)+' s, 0 m/s')
+  +'</div>'
+  +'<div class="col"><h4>STAGE ANSWERS</h4>'
+  + row('1 &#183; Speed', f(a.v_i,2)+' m/s')
+  + row('2 &#183; Stopping time', f(a.t,2)+' s')
+  + row('3 &#183; Stopping distance', f(a.dx,1)+' m')
+  + row('4 &#183; Gap to marker', f(a.gap,1)+' m')
+  + row('5 &#183; Area under v&#8211;t', f(a.area,1)+' m')
+  + row('6 &#183; Cross-check', f(a.xcheck,2)+' %')
+  + row('Cross-check question', GATE_SHORT[1])
+  +'</div>'
+  +'<div class="col"><h4>WRONG ANSWERS TO RECOGNISE</h4>'
+  + row('Distance = v &#215; t', f(t.trapVT,1)+' m')
+  + row('km/h never converted (stage 3)', f(t.trapKmh,0)+' m')
+  + row('Multiplied by 3.6 (stage 1)', f(t.trapX36,1)+' m/s')
+  + row('Rectangle, no &#189; (stage 5)', f(t.trapRect,1)+' m')
+  + row('Stopped', f(a.gap,1)+' m '+(over?'past':'before')+' the marker')
+  +'</div></div>'
+  +'<div class="note">'
+  + (over
+     ? 'The train needed '+f(a.dx,1)+' m and had '+g.d+' m, so the front stopped '+f(a.gap,1)+' m past the marker. On cross-examination 2, watch for students who conclude the brakes were faulty: the measured braking rate was steady, and this evidence does not say whether the speed or the braking was outside what the train was meant to do.'
+     : 'The train needed '+f(a.dx,1)+' m and had '+g.d+' m, so it stopped '+f(a.gap,1)+' m short of the marker. On cross-examination 2, watch for students who call the passenger a liar: the evidence shows where the train stopped, not what the passenger saw.')
+  + ' The speed &#215; time argument gives <strong>'+f(t.trapVT,1)+' m</strong>, exactly twice the true distance, because the speed fell steadily from '+f(a.v_i,1)+' m/s to zero. The average speed is half of v<sub>i</sub>.'
+  +'</div>'
+  +(L?markHTML(R,L):'')
+  +'</div>';
+}
+
+$('#go').addEventListener('click',function(){
+  var names=$('#names').value.split(/\n/).map(function(s){return s.trim();})
+    .filter(function(s){return PF1D.normalizeName(s).length>=3;});
+  var lines=$('#lines').value.split(/\n/).map(function(s){return s.trim();}).filter(Boolean);
+  var parsed={}, bad=[];
+  lines.forEach(function(l){ var P=parseLine(l); if(!P){bad.push(l);return;}
+    parsed[PF1D.normalizeName(P.name)]=P; });
+  Object.keys(parsed).forEach(function(k){
+    var on=names.some(function(x){return PF1D.normalizeName(x)===k;});
+    if(!on) names.push(parsed[k].name);
+  });
+  if(!names.length){$('#out').innerHTML='<p class="warn">Enter at least one name of three or more characters.</p>';return;}
+  var seen={},uniq=[];
+  names.forEach(function(x){var k=PF1D.normalizeName(x);if(!seen[k]){seen[k]=1;uniq.push(x);}});
+  var rs=uniq.map(function(x){return PF1D.generate(x);});
+  var no=rs.filter(function(r){return r.truth.overran;}).length;
+  var marked=rs.filter(function(r){return parsed[r.name];}).length;
+  $('#out').innerHTML='<p class="lede" style="margin-top:26px">'+rs.length+' students &#183; '
+    +no+' overran &#183; '+(rs.length-no)+' stopped short'+(marked?' &#183; '+marked+' answer lines marked':'')+'</p>'
+    +(bad.length?'<p class="warn">Could not read '+bad.length+' answer line(s): '+bad.map(esc).join(' &nbsp;/&nbsp; ')+'</p>':'')
+    +rs.map(function(r){return card(r,parsed[r.name]);}).join('');
+});
+$('#pr').addEventListener('click',function(){window.print();});
+})();
+</script></body></html>
